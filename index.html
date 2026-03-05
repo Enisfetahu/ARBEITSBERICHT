@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parkett Haliti - Arbeitsbericht</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        body { -webkit-tap-highlight-color: transparent; }
+        .btn-active:active { transform: scale(0.95); }
+        .logo-font { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; letter-spacing: -1px; }
+        .parkett { color: #374151; }
+        .haliti { color: #15803d; font-weight: bold; }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #15803d; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans pb-20">
+
+    <div class="max-w-md mx-auto p-4">
+        <!-- Logo Section -->
+        <div class="flex flex-col items-center mb-8 pt-4">
+            <div class="text-3xl logo-font flex items-center gap-1 uppercase">
+                <span class="parkett text-gray-700">parkett</span>
+                <span class="haliti text-green-700">haliti</span>
+            </div>
+            <div class="flex gap-1 mt-1">
+                <div class="w-8 h-1 bg-green-700 rounded-full"></div>
+                <div class="w-16 h-1 bg-gray-700 rounded-full"></div>
+                <div class="w-8 h-1 bg-green-700 rounded-full"></div>
+            </div>
+        </div>
+
+        <!-- Header with History Toggle -->
+        <header class="mb-6 flex justify-between items-center px-2">
+            <div class="text-left">
+                <h1 class="text-xl font-bold text-gray-800 uppercase tracking-wide">Arbeitsbericht</h1>
+                <p id="live-clock" class="text-green-600 text-xs font-bold uppercase tracking-widest">Loding time...</p>
+            </div>
+            <button onclick="toggleHistory()" class="bg-white border border-gray-200 p-2 rounded-xl shadow-sm flex items-center gap-2 text-sm font-bold text-gray-700 btn-active">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Historie
+            </button>
+        </header>
+
+        <!-- Form Section -->
+        <div id="main-form">
+            <!-- Mitarbeiter Details -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-4">
+                <h3 class="text-sm font-bold text-gray-400 uppercase mb-3 tracking-wider text-center border-b pb-2">Mitarbeiter</h3>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Name des Mitarbeiters</label>
+                    <input type="text" id="worker-name" placeholder="Vorname Nachname" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-green-500 outline-none">
+                </div>
+            </div>
+
+            <!-- Location Details -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-4">
+                <h3 class="text-sm font-bold text-gray-400 uppercase mb-3 tracking-wider text-center border-b pb-2">Standortdetails</h3>
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">Adresse / Projektname</label>
+                        <input type="text" id="project-address" placeholder="Strasse, Hausnummer, Ort" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-green-500 outline-none">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">Stockwerk (Etage)</label>
+                            <input type="text" id="project-floor" placeholder="z.B. 1. OG" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-green-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">Objekttyp</label>
+                            <select id="project-type" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-green-500 outline-none">
+                                <option value="Wohnung">Wohnung</option>
+                                <option value="Haus">Haus</option>
+                                <option value="Gewerbe">Gewerbe</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-4">
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Datum & Uhrzeit</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="date" id="work-date" class="p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none text-md font-medium">
+                        <input type="time" id="work-time" class="p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none text-md font-medium">
+                    </div>
+                </div>
+
+                <div id="job-list" class="space-y-4">
+                    <!-- Job Items go here -->
+                </div>
+
+                <button onclick="addJobRow()" class="w-full mt-4 py-3 border-2 border-dashed border-green-300 text-green-700 rounded-xl font-bold flex items-center justify-center gap-2 btn-active">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Weitere Arbeit
+                </button>
+            </div>
+
+            <!-- Total Section -->
+            <div class="bg-gray-800 rounded-2xl p-5 text-white mb-6 flex justify-between items-center shadow-lg border-b-4 border-green-600">
+                <span class="text-lg font-medium tracking-wider">GESAMT:</span>
+                <span id="total-m2" class="text-3xl font-bold">0 m²</span>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="grid grid-cols-1 gap-3">
+                <button onclick="saveToLocal()" class="w-full bg-green-700 hover:bg-green-800 text-white py-4 rounded-xl font-bold text-lg shadow-md btn-active uppercase tracking-widest">
+                    Bericht speichern
+                </button>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="generatePDF()" class="bg-gray-700 hover:bg-gray-900 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 btn-active uppercase text-sm">
+                        PDF Erstellen
+                    </button>
+                    <button onclick="sharePDF()" class="bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 btn-active uppercase text-sm">
+                        Teilen
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Section (Hidden by default) -->
+        <div id="history-section" class="hidden">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="font-bold text-gray-800 uppercase">Gespeicherte Berichte</h2>
+                    <button onclick="clearHistory()" class="text-xs text-red-500 font-bold underline uppercase tracking-tighter">Alles löschen</button>
+                </div>
+                <div id="history-list" class="space-y-3 max-h-[60vh] overflow-y-auto custom-scroll pr-1">
+                    <!-- History items go here -->
+                </div>
+            </div>
+            <button onclick="toggleHistory()" class="w-full bg-gray-200 text-gray-700 py-3 rounded-xl font-bold btn-active">
+                Zurück zum Formular
+            </button>
+        </div>
+
+        <!-- Status Message -->
+        <div id="status-msg" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-full text-sm font-medium opacity-0 transition-opacity pointer-events-none z-50 shadow-2xl">
+            Erfolgreich!
+        </div>
+    </div>
+
+    <script>
+        const jobTypes = ["Parkett verlegen", "Schleifen & Versiegeln", "Laminat", "Vinyl/Designboden", "Sockelleisten", "Andere Arbeit"];
+        
+        window.onload = () => {
+            updateLiveTime();
+            setInterval(updateLiveTime, 1000);
+            
+            // Set current date and time
+            const now = new Date();
+            document.getElementById('work-date').value = now.toISOString().split('T')[0];
+            document.getElementById('work-time').value = now.toTimeString().slice(0,5);
+            
+            addJobRow();
+            loadHistory();
+        };
+
+        function updateLiveTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const dateStr = now.toLocaleDateString('de-DE');
+            document.getElementById('live-clock').innerText = `${dateStr} | ${timeStr}`;
+        }
+
+        function addJobRow() {
+            const container = document.getElementById('job-list');
+            const rowId = Date.now();
+            const div = document.createElement('div');
+            div.className = "p-4 bg-gray-50 rounded-xl border border-gray-200 relative";
+            div.id = `row-${rowId}`;
+            div.innerHTML = `
+                <button onclick="removeRow(${rowId})" class="absolute -top-2 -right-2 bg-red-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs shadow-sm">✕</button>
+                <div class="mb-3">
+                    <select onchange="handleTypeChange(${rowId}, this.value)" class="job-type w-full p-2 rounded-lg border border-gray-300 bg-white font-medium">
+                        ${jobTypes.map(t => `<option value="${t}">${t}</option>`).join('')}
+                    </select>
+                </div>
+                <div id="custom-input-${rowId}" class="hidden mb-3">
+                    <input type="text" placeholder="Arbeitsbeschreibung..." class="custom-name w-full p-2 rounded-lg border border-gray-300">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="relative">
+                        <input type="number" step="0.01" placeholder="0.00" oninput="calculateTotal()" class="job-m2 w-full p-2 pr-8 rounded-lg border border-gray-300 font-bold text-green-700" required>
+                        <span class="absolute right-2 top-2 text-gray-400 text-sm">m²</span>
+                    </div>
+                    <input type="text" placeholder="Notiz..." class="job-note w-full p-2 rounded-lg border border-gray-300 text-sm">
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        function removeRow(id) {
+            if (document.querySelectorAll('.job-type').length > 1) {
+                document.getElementById(`row-${id}`).remove();
+                calculateTotal();
+            }
+        }
+
+        function handleTypeChange(id, value) {
+            const customInput = document.getElementById(`custom-input-${id}`);
+            if (value === "Andere Arbeit") customInput.classList.remove('hidden');
+            else customInput.classList.add('hidden');
+        }
+
+        function calculateTotal() {
+            let total = 0;
+            document.querySelectorAll('.job-m2').forEach(input => {
+                total += parseFloat(input.value) || 0;
+            });
+            document.getElementById('total-m2').innerText = `${total.toFixed(2)} m²`;
+            return total;
+        }
+
+        function getJobData() {
+            const data = [];
+            document.querySelectorAll('[id^="row-"]').forEach(row => {
+                const type = row.querySelector('.job-type').value;
+                const customName = row.querySelector('.custom-name').value;
+                const m2 = parseFloat(row.querySelector('.job-m2').value) || 0;
+                const note = row.querySelector('.job-note').value;
+                if (m2 > 0) {
+                    data.push({
+                        puna: type === "Andere Arbeit" ? customName || "Andere Arbeit" : type,
+                        m2: m2,
+                        shenim: note
+                    });
+                }
+            });
+            return data;
+        }
+
+        function toggleHistory() {
+            const form = document.getElementById('main-form');
+            const history = document.getElementById('history-section');
+            if (history.classList.contains('hidden')) {
+                loadHistory();
+                history.classList.remove('hidden');
+                form.classList.add('hidden');
+            } else {
+                history.classList.add('hidden');
+                form.classList.remove('hidden');
+            }
+        }
+
+        function saveToLocal() {
+            const data = getJobData();
+            if (data.length === 0) return showStatus("Bitte m² eingeben!");
+            const entry = { 
+                id: Date.now(),
+                date: document.getElementById('work-date').value, 
+                time: document.getElementById('work-time').value,
+                address: document.getElementById('project-address').value || "Keine Adresse",
+                floor: document.getElementById('project-floor').value || "-",
+                type: document.getElementById('project-type').value,
+                worker: document.getElementById('worker-name').value || "-",
+                data, 
+                total: calculateTotal() 
+            };
+            let history = JSON.parse(localStorage.getItem('parkett_history') || '[]');
+            history.unshift(entry);
+            localStorage.setItem('parkett_history', JSON.stringify(history));
+            showStatus("Gespeichert!");
+            loadHistory();
+        }
+
+        function loadHistory() {
+            const container = document.getElementById('history-list');
+            const history = JSON.parse(localStorage.getItem('parkett_history') || '[]');
+            if (history.length === 0) {
+                container.innerHTML = `<p class="text-center text-gray-400 py-10">Keine Berichte gespeichert.</p>`;
+                return;
+            }
+            container.innerHTML = history.map(entry => `
+                <div class="p-3 bg-gray-50 border border-gray-200 rounded-xl flex justify-between items-center shadow-sm">
+                    <div class="flex-1">
+                        <div class="font-bold text-gray-800 text-sm leading-none mb-1">
+                            ${new Date(entry.date).toLocaleDateString('de-DE')} | ${entry.time || '--:--'}
+                        </div>
+                        <div class="text-xs text-gray-500 truncate max-w-[150px] mb-1 font-medium">${entry.address}</div>
+                        <div class="text-[10px] text-gray-400 block mb-1">Mitarbeiter: ${entry.worker}</div>
+                        <div class="text-[10px] bg-green-100 text-green-700 inline-block px-2 py-0.5 rounded font-bold">${entry.total}</div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick='downloadFromHistory(${JSON.stringify(entry).replace(/'/g, "&apos;")})' class="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        </button>
+                        <button onclick="deleteEntry(${entry.id})" class="p-2 bg-red-50 text-red-500 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function deleteEntry(id) {
+            let history = JSON.parse(localStorage.getItem('parkett_history') || '[]');
+            history = history.filter(e => e.id !== id);
+            localStorage.setItem('parkett_history', JSON.stringify(history));
+            loadHistory();
+        }
+
+        function clearHistory() {
+            if(confirm("Alle Berichte löschen?")) {
+                localStorage.removeItem('parkett_history');
+                loadHistory();
+            }
+        }
+
+        function downloadFromHistory(entry) {
+            document.getElementById('worker-name').value = entry.worker;
+            document.getElementById('project-address').value = entry.address;
+            document.getElementById('project-floor').value = entry.floor;
+            document.getElementById('project-type').value = entry.type;
+            document.getElementById('work-date').value = entry.date;
+            document.getElementById('work-time').value = entry.time || "12:00";
+            
+            const container = document.getElementById('job-list');
+            container.innerHTML = '';
+            entry.data.forEach(item => {
+                addJobRow();
+                const lastRow = container.lastElementChild;
+                lastRow.querySelector('.job-type').value = item.puna;
+                lastRow.querySelector('.job-m2').value = item.m2;
+                lastRow.querySelector('.job-note').value = item.shenim;
+            });
+            calculateTotal();
+            generatePDF();
+            showStatus("PDF erstellt...");
+        }
+
+        function showStatus(msg) {
+            const el = document.getElementById('status-msg');
+            el.innerText = msg;
+            el.style.opacity = "1";
+            setTimeout(() => { el.style.opacity = "0"; }, 2500);
+        }
+
+        async function generatePDF(returnBlob = false) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            const worker = document.getElementById('worker-name').value || "-";
+            const date = document.getElementById('work-date').value;
+            const time = document.getElementById('work-time').value;
+            const address = document.getElementById('project-address').value || "N/A";
+            const floor = document.getElementById('project-floor').value || "-";
+            const type = document.getElementById('project-type').value;
+            
+            const data = getJobData();
+            if (data.length === 0) return;
+
+            // PDF Header
+            doc.setFillColor(55, 65, 81);
+            doc.rect(0, 0, 210, 45, 'F');
+            doc.setFontSize(24);
+            doc.setTextColor(255, 255, 255);
+            doc.setFont("helvetica", "bold");
+            doc.text("PARKETT ", 20, 25);
+            doc.setTextColor(34, 197, 94);
+            doc.text("HALITI", 62, 25);
+            doc.setFontSize(10);
+            doc.setTextColor(200, 200, 200);
+            doc.text("QUALITÄTSBÖDEN & MEHR", 20, 32);
+
+            // Project Info Box (Right side)
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(10);
+            doc.text(`Datum/Zeit: ${new Date(date).toLocaleDateString('de-DE')} ${time}`, 190, 18, {align: 'right'});
+            doc.text(`Typ: ${type}`, 190, 24, {align: 'right'});
+            doc.text(`Etage: ${floor}`, 190, 30, {align: 'right'});
+            doc.setFont("helvetica", "bold");
+            doc.text(`Puntori: ${worker}`, 190, 38, {align: 'right'});
+
+            // Body
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "bold");
+            doc.text("TÄGLICHER ARBEITSBERICHT", 105, 60, { align: "center" });
+            
+            doc.setFontSize(11);
+            doc.text("Standort / Objekt:", 20, 75);
+            doc.setFont("helvetica", "normal");
+            doc.text(address, 60, 75);
+
+            const tableRows = data.map(item => [item.puna, item.shenim || "-", `${item.m2.toFixed(2)} m²`]);
+            doc.autoTable({
+                startY: 85,
+                head: [['Arbeitsart', 'Notiz / Details', 'Fläche']],
+                body: tableRows,
+                theme: 'grid',
+                headStyles: { fillColor: [21, 128, 61], fontStyle: 'bold' },
+                bodyStyles: { fontStyle: 'bold', textColor: [0, 0, 0] },
+                columnStyles: { 2: { halign: 'right' } }
+            });
+
+            // Total in Table
+            const finalY = doc.lastAutoTable.finalY || 100;
+            doc.setFont("helvetica", "bold");
+            doc.text(`GESAMTFLÄCHE: ${calculateTotal().toFixed(2)} m²`, 190, finalY + 10, {align: 'right'});
+
+            if (returnBlob) return doc.output('blob');
+            doc.save(`Parkett_Haliti_${date}_${time.replace(':','-')}.pdf`);
+        }
+
+        async function sharePDF() {
+            try {
+                const blob = await generatePDF(true);
+                const date = document.getElementById('work-date').value;
+                const file = new File([blob], `Bericht_Haliti_${date}.pdf`, { type: 'application/pdf' });
+                if (navigator.share) {
+                    await navigator.share({ title: 'Arbeitsbericht Parkett Haliti', files: [file] });
+                }
+            } catch (err) { console.error(err); }
+        }
+    </script>
+</body>
+</html>
