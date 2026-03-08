@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        <!-- Header with History Toggle -->
+        <!-- Header -->
         <header class="mb-6 flex justify-between items-center px-2">
             <div class="text-left">
                 <h1 class="text-xl font-bold text-gray-800 uppercase tracking-wide">Arbeitsbericht</h1>
@@ -48,124 +48,76 @@
 
         <!-- Form Section -->
         <div id="main-form">
-            <!-- Mitarbeiter Details -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-4">
                 <h3 class="text-sm font-bold text-gray-400 uppercase mb-3 tracking-wider text-center border-b pb-2">Mitarbeiter</h3>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-500 mb-1">Name des Mitarbeiters</label>
-                    <input type="text" id="worker-name" placeholder="Vorname Nachname" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-green-500 outline-none">
-                </div>
+                <input type="text" id="worker-name" placeholder="Vorname Nachname" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-green-500 outline-none">
             </div>
 
-            <!-- Location Details -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-4">
                 <h3 class="text-sm font-bold text-gray-400 uppercase mb-3 tracking-wider text-center border-b pb-2">Standortdetails</h3>
                 <div class="space-y-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-500 mb-1">Adresse / Projektname</label>
-                        <input type="text" id="project-address" placeholder="Strasse, Hausnummer, Ort" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-green-500 outline-none">
-                    </div>
+                    <input type="text" id="project-address" placeholder="Strasse, Hausnummer, Ort" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-green-500 outline-none">
                     <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-500 mb-1">Stockwerk (Etage)</label>
-                            <input type="text" id="project-floor" placeholder="z.B. 1. OG" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-green-500 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-500 mb-1">Rechts/Links</label>
-                            <select id="project-type" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-green-500 outline-none">
-                                <option value="Rechts">Rechts</option>
-                                <option value="Links">Links</option>
-                            </select>
-                        </div>
+                        <input type="text" id="project-floor" placeholder="z.B. 1. OG " class="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-green-500 outline-none">
+                        <select id="project-type" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-green-500 outline-none">
+                            <option value="Rechts">Rechts</option>
+                            <option value="Links">Links</option>
+                            <option value=".">.</option>
+                        </select>
                     </div>
                 </div>
             </div>
 
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-4">
-                <div class="mb-4">
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">Datum & Uhrzeit</label>
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="date" id="work-date" class="p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none text-md font-medium">
-                        <input type="time" id="work-time" class="p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none text-md font-medium">
-                    </div>
+                <div class="grid grid-cols-2 gap-2 mb-4">
+                    <input type="date" id="work-date" class="p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none">
+                    <input type="time" id="work-time" class="p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none">
                 </div>
-
-                <div id="job-list" class="space-y-4">
-                    <!-- Job Items go here -->
-                </div>
-
+                <div id="job-list" class="space-y-4"></div>
                 <button onclick="addJobRow()" class="w-full mt-4 py-3 border-2 border-dashed border-green-300 text-green-700 rounded-xl font-bold flex items-center justify-center gap-2 btn-active">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                    Weitere Arbeit
+                    + Weitere Arbeit
                 </button>
             </div>
 
-            <!-- Total Section -->
-            <div class="bg-gray-800 rounded-2xl p-5 text-white mb-6 flex justify-between items-center shadow-lg border-b-4 border-green-600">
-                <span class="text-lg font-medium tracking-wider">GESAMT:</span>
-                <span id="total-m2" class="text-3xl font-bold">0 m²</span>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="grid grid-cols-1 gap-3">
-                <button onclick="saveToLocal()" class="w-full bg-green-700 hover:bg-green-800 text-white py-4 rounded-xl font-bold text-lg shadow-md btn-active uppercase tracking-widest">
-                    Bericht speichern
-                </button>
-                
-                <div class="grid grid-cols-2 gap-3">
-                    <button onclick="generatePDF()" class="bg-gray-700 hover:bg-gray-900 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 btn-active uppercase text-sm">
-                        PDF Erstellen
-                    </button>
-                    <button onclick="sharePDF()" class="bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 btn-active uppercase text-sm">
-                        Teilen
-                    </button>
-                </div>
+            <button onclick="saveToLocal()" class="w-full bg-green-700 text-white py-4 rounded-xl font-bold text-lg mb-3 btn-active uppercase">Bericht speichern</button>
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="generatePDF()" class="bg-gray-700 text-white py-4 rounded-xl font-bold btn-active uppercase text-sm">PDF Erstellen</button>
+                <button onclick="sharePDF()" class="bg-green-600 text-white py-4 rounded-xl font-bold btn-active uppercase text-sm">Teilen</button>
             </div>
         </div>
 
-        <!-- History Section (Hidden by default) -->
+        <!-- History Section -->
         <div id="history-section" class="hidden">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-4">
+            <div class="bg-white rounded-2xl p-5 mb-4 shadow-sm border border-gray-100">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="font-bold text-gray-800 uppercase">Gespeicherte Berichte</h2>
-                    <button onclick="clearHistory()" class="text-xs text-red-500 font-bold underline uppercase tracking-tighter">Alles löschen</button>
+                    <h2 class="font-bold uppercase text-gray-800">Historie</h2>
+                    <button onclick="clearHistory()" class="text-xs text-red-500 underline uppercase font-bold">Löschen</button>
                 </div>
-                <div id="history-list" class="space-y-3 max-h-[60vh] overflow-y-auto custom-scroll pr-1">
-                    <!-- History items go here -->
-                </div>
+                <div id="history-list" class="space-y-3 max-h-[60vh] overflow-y-auto custom-scroll pr-1"></div>
             </div>
-            <button onclick="toggleHistory()" class="w-full bg-gray-200 text-gray-700 py-3 rounded-xl font-bold btn-active">
-                Zurück zum Formular
-            </button>
+            <button onclick="toggleHistory()" class="w-full bg-gray-200 py-3 rounded-xl font-bold btn-active">Zurück</button>
         </div>
 
-        <!-- Status Message -->
-        <div id="status-msg" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-full text-sm font-medium opacity-0 transition-opacity pointer-events-none z-50 shadow-2xl">
-            Erfolgreich!
-        </div>
+        <div id="status-msg" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-black text-white px-6 py-3 rounded-full text-sm opacity-0 transition-opacity pointer-events-none z-50"></div>
     </div>
 
     <script>
-        const jobTypes = ["Parkett verlegen", "Schleifen & Versiegeln", "Laminat", "Vinyl/Designboden", "Sockelleisten", "Andere Arbeit"];
-        
+        const jobTypes = ["Parkett verlegen", "Schleifen & Versiegeln", "Laminat", "Vinyl/Designboden", "Sockelleisten", "Andere Arbeit", "Tepich"];
+        const unitTypes = ["m²", "m", "X"];
+
         window.onload = () => {
             updateLiveTime();
             setInterval(updateLiveTime, 1000);
-            
-            // Set current date and time
             const now = new Date();
             document.getElementById('work-date').value = now.toISOString().split('T')[0];
             document.getElementById('work-time').value = now.toTimeString().slice(0,5);
-            
             addJobRow();
             loadHistory();
         };
 
         function updateLiveTime() {
             const now = new Date();
-            const timeStr = now.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            const dateStr = now.toLocaleDateString('de-DE');
-            document.getElementById('live-clock').innerText = `${dateStr} | ${timeStr}`;
+            document.getElementById('live-clock').innerText = now.toLocaleString('de-DE');
         }
 
         function addJobRow() {
@@ -175,19 +127,22 @@
             div.className = "p-4 bg-gray-50 rounded-xl border border-gray-200 relative";
             div.id = `row-${rowId}`;
             div.innerHTML = `
-                <button onclick="removeRow(${rowId})" class="absolute -top-2 -right-2 bg-red-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs shadow-sm">✕</button>
-                <div class="mb-3">
-                    <select onchange="handleTypeChange(${rowId}, this.value)" class="job-type w-full p-2 rounded-lg border border-gray-300 bg-white font-medium">
+                <button onclick="removeRow(${rowId})" class="absolute -top-2 -right-2 bg-red-500 text-white w-6 h-6 rounded-full text-xs">✕</button>
+                <div class="grid grid-cols-2 gap-2 mb-3">
+                    <select onchange="handleTypeChange(${rowId}, this.value)" class="job-type w-full p-2 rounded-lg border border-gray-300 text-sm">
                         ${jobTypes.map(t => `<option value="${t}">${t}</option>`).join('')}
                     </select>
+                    <input type="text" placeholder="Zimmer..." class="job-room w-full p-2 rounded-lg border border-gray-300 text-sm">
                 </div>
                 <div id="custom-input-${rowId}" class="hidden mb-3">
-                    <input type="text" placeholder="Arbeitsbeschreibung..." class="custom-name w-full p-2 rounded-lg border border-gray-300">
+                    <input type="text" placeholder="Beschreibung..." class="custom-name w-full p-2 rounded-lg border border-gray-300 text-sm">
                 </div>
                 <div class="grid grid-cols-2 gap-2">
-                    <div class="relative">
-                        <input type="number" step="0.01" placeholder="0.00" oninput="calculateTotal()" class="job-m2 w-full p-2 pr-8 rounded-lg border border-gray-300 font-bold text-green-700" required>
-                        <span class="absolute right-2 top-2 text-gray-400 text-sm">m²</span>
+                    <div class="flex gap-1">
+                        <input type="number" step="0.01" id="amount-${rowId}" placeholder="Wert" class="job-amount w-full p-2 rounded-lg border border-gray-300 font-bold text-green-700 text-sm">
+                        <select onchange="handleUnitChange(${rowId}, this.value)" class="job-unit p-2 rounded-lg border border-gray-300 bg-white text-xs font-bold">
+                            ${unitTypes.map(u => `<option value="${u}">${u}</option>`).join('')}
+                        </select>
                     </div>
                     <input type="text" placeholder="Notiz..." class="job-note w-full p-2 rounded-lg border border-gray-300 text-sm">
                 </div>
@@ -195,10 +150,14 @@
             container.appendChild(div);
         }
 
-        function removeRow(id) {
-            if (document.querySelectorAll('.job-type').length > 1) {
-                document.getElementById(`row-${id}`).remove();
-                calculateTotal();
+        function handleUnitChange(rowId, unit) {
+            const input = document.getElementById(`amount-${rowId}`);
+            if (unit === 'X') {
+                input.type = 'text';
+                input.placeholder = '3.21 x 2.61';
+            } else {
+                input.type = 'number';
+                input.placeholder = 'Wert';
             }
         }
 
@@ -208,27 +167,25 @@
             else customInput.classList.add('hidden');
         }
 
-        function calculateTotal() {
-            let total = 0;
-            document.querySelectorAll('.job-m2').forEach(input => {
-                total += parseFloat(input.value) || 0;
-            });
-            document.getElementById('total-m2').innerText = `${total.toFixed(2)} m²`;
-            return total;
+        function removeRow(id) {
+            if (document.querySelectorAll('.job-type').length > 1) document.getElementById(`row-${id}`).remove();
         }
 
         function getJobData() {
             const data = [];
             document.querySelectorAll('[id^="row-"]').forEach(row => {
+                const rowId = row.id.split('-')[1];
                 const type = row.querySelector('.job-type').value;
-                const customName = row.querySelector('.custom-name').value;
-                const m2 = parseFloat(row.querySelector('.job-m2').value) || 0;
-                const note = row.querySelector('.job-note').value;
-                if (m2 > 0) {
+                const room = row.querySelector('.job-room').value;
+                const amount = document.getElementById(`amount-${rowId}`).value;
+                const unit = row.querySelector('.job-unit').value;
+                if (amount) {
                     data.push({
-                        puna: type === "Andere Arbeit" ? customName || "Andere Arbeit" : type,
-                        m2: m2,
-                        shenim: note
+                        puna: type === "Andere Arbeit" ? row.querySelector('.custom-name').value || type : type,
+                        room: room || "-",
+                        amount: amount,
+                        unit: unit,
+                        shenim: row.querySelector('.job-note').value || "-"
                     });
                 }
             });
@@ -236,187 +193,155 @@
         }
 
         function toggleHistory() {
-            const form = document.getElementById('main-form');
-            const history = document.getElementById('history-section');
-            if (history.classList.contains('hidden')) {
-                loadHistory();
-                history.classList.remove('hidden');
-                form.classList.add('hidden');
-            } else {
-                history.classList.add('hidden');
-                form.classList.remove('hidden');
-            }
+            document.getElementById('main-form').classList.toggle('hidden');
+            document.getElementById('history-section').classList.toggle('hidden');
+            if (!document.getElementById('history-section').classList.contains('hidden')) loadHistory();
         }
 
         function saveToLocal() {
             const data = getJobData();
-            if (data.length === 0) return showStatus("Bitte m² eingeben!");
-            const entry = { 
+            if (data.length === 0) return showStatus("Bitte Daten eingeben!");
+            const entry = {
                 id: Date.now(),
-                date: document.getElementById('work-date').value, 
+                date: document.getElementById('work-date').value,
                 time: document.getElementById('work-time').value,
-                address: document.getElementById('project-address').value || "Keine Adresse",
+                address: document.getElementById('project-address').value || "-",
                 floor: document.getElementById('project-floor').value || "-",
                 type: document.getElementById('project-type').value,
                 worker: document.getElementById('worker-name').value || "-",
-                data, 
-                total: calculateTotal() 
+                data
             };
-            let history = JSON.parse(localStorage.getItem('parkett_history') || '[]');
+            let history = JSON.parse(localStorage.getItem('haliti_reports') || '[]');
             history.unshift(entry);
-            localStorage.setItem('parkett_history', JSON.stringify(history));
+            localStorage.setItem('haliti_reports', JSON.stringify(history));
             showStatus("Gespeichert!");
-            loadHistory();
         }
 
         function loadHistory() {
             const container = document.getElementById('history-list');
-            const history = JSON.parse(localStorage.getItem('parkett_history') || '[]');
-            if (history.length === 0) {
-                container.innerHTML = `<p class="text-center text-gray-400 py-10">Keine Berichte gespeichert.</p>`;
-                return;
-            }
-            container.innerHTML = history.map(entry => `
-                <div class="p-3 bg-gray-50 border border-gray-200 rounded-xl flex justify-between items-center shadow-sm">
-                    <div class="flex-1">
-                        <div class="font-bold text-gray-800 text-sm leading-none mb-1">
-                            ${new Date(entry.date).toLocaleDateString('de-DE')} | ${entry.time || '--:--'}
-                        </div>
-                        <div class="text-xs text-gray-500 truncate max-w-[150px] mb-1 font-medium">${entry.address}</div>
-                        <div class="text-[10px] text-gray-400 block mb-1">Mitarbeiter: ${entry.worker}</div>
-                        <div class="text-[10px] bg-green-100 text-green-700 inline-block px-2 py-0.5 rounded font-bold">${entry.total}</div>
+            const history = JSON.parse(localStorage.getItem('haliti_reports') || '[]');
+            container.innerHTML = history.length ? history.map(entry => `
+                <div class="p-3 bg-gray-50 border rounded-xl flex justify-between items-center text-xs">
+                    <div class="flex-1 overflow-hidden">
+                        <div class="font-bold">${new Date(entry.date).toLocaleDateString()} | ${entry.time}</div>
+                        <div class="text-gray-500 truncate">${entry.address}</div>
                     </div>
-                    <div class="flex gap-2">
-                        <button onclick='downloadFromHistory(${JSON.stringify(entry).replace(/'/g, "&apos;")})' class="p-2 bg-blue-50 text-blue-600 rounded-lg">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                        </button>
-                        <button onclick="deleteEntry(${entry.id})" class="p-2 bg-red-50 text-red-500 rounded-lg">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                        </button>
+                    <div class="flex gap-2 ml-2">
+                        <button onclick='loadEntry(${JSON.stringify(entry).replace(/'/g, "&apos;")})' class="text-blue-600 font-bold uppercase">Laden</button>
+                        <button onclick="deleteEntry(${entry.id})" class="text-red-500 font-bold">X</button>
                     </div>
                 </div>
-            `).join('');
+            `).join('') : '<p class="text-center text-gray-400 py-4">Keine Daten</p>';
         }
 
-        function deleteEntry(id) {
-            let history = JSON.parse(localStorage.getItem('parkett_history') || '[]');
-            history = history.filter(e => e.id !== id);
-            localStorage.setItem('parkett_history', JSON.stringify(history));
-            loadHistory();
-        }
-
-        function clearHistory() {
-            if(confirm("Alle Berichte löschen?")) {
-                localStorage.removeItem('parkett_history');
-                loadHistory();
-            }
-        }
-
-        function downloadFromHistory(entry) {
+        function loadEntry(entry) {
             document.getElementById('worker-name').value = entry.worker;
             document.getElementById('project-address').value = entry.address;
             document.getElementById('project-floor').value = entry.floor;
             document.getElementById('project-type').value = entry.type;
             document.getElementById('work-date').value = entry.date;
-            document.getElementById('work-time').value = entry.time || "12:00";
-            
+            document.getElementById('work-time').value = entry.time;
             const container = document.getElementById('job-list');
             container.innerHTML = '';
             entry.data.forEach(item => {
                 addJobRow();
                 const lastRow = container.lastElementChild;
+                const rowId = lastRow.id.split('-')[1];
                 lastRow.querySelector('.job-type').value = item.puna;
-                lastRow.querySelector('.job-m2').value = item.m2;
+                lastRow.querySelector('.job-room').value = item.room;
+                lastRow.querySelector('.job-unit').value = item.unit;
+                handleUnitChange(rowId, item.unit);
+                document.getElementById(`amount-${rowId}`).value = item.amount;
                 lastRow.querySelector('.job-note').value = item.shenim;
             });
-            calculateTotal();
-            generatePDF();
-            showStatus("PDF erstellt...");
+            toggleHistory();
         }
+
+        function deleteEntry(id) {
+            let history = JSON.parse(localStorage.getItem('haliti_reports') || '[]');
+            localStorage.setItem('haliti_reports', JSON.stringify(history.filter(e => e.id !== id)));
+            loadHistory();
+        }
+
+        function clearHistory() { if(confirm("Löschen?")) { localStorage.removeItem('haliti_reports'); loadHistory(); } }
 
         function showStatus(msg) {
             const el = document.getElementById('status-msg');
-            el.innerText = msg;
-            el.style.opacity = "1";
-            setTimeout(() => { el.style.opacity = "0"; }, 2500);
+            el.innerText = msg; el.style.opacity = "1";
+            setTimeout(() => el.style.opacity = "0", 2000);
         }
 
         async function generatePDF(returnBlob = false) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
+            const data = getJobData();
+            if (!data.length) return;
+
+            // Header Section
+            doc.setFillColor(55, 65, 81); doc.rect(0, 0, 210, 45, 'F');
+            doc.setTextColor(255, 255, 255); doc.setFontSize(22); doc.setFont("helvetica", "bold");
+            doc.text("PARKETT HALITI", 20, 25);
             
-            const worker = document.getElementById('worker-name').value || "-";
+            doc.setFontSize(10);
             const date = document.getElementById('work-date').value;
             const time = document.getElementById('work-time').value;
-            const address = document.getElementById('project-address').value || "N/A";
-            const floor = document.getElementById('project-floor').value || "-";
+            const address = document.getElementById('project-address').value;
+            const worker = document.getElementById('worker-name').value;
+            const floor = document.getElementById('project-floor').value;
             const type = document.getElementById('project-type').value;
-            
-            const data = getJobData();
-            if (data.length === 0) return;
 
-            // PDF Header
-            doc.setFillColor(55, 65, 81);
-            doc.rect(0, 0, 210, 45, 'F');
-            doc.setFontSize(24);
-            doc.setTextColor(255, 255, 255);
-            doc.setFont("helvetica", "bold");
-            doc.text("PARKETT ", 20, 25);
-            doc.setTextColor(34, 197, 94);
-            doc.text("HALITI", 62, 25);
-            doc.setFontSize(10);
-            doc.setTextColor(200, 200, 200);
-            doc.text("QUALITÄTSBÖDEN & MEHR", 20, 32);
+            doc.text(`Datum/Zeit: ${date} ${time}`, 190, 18, {align: 'right'});
+            doc.text(`Etage/Typ: ${floor} (${type})`, 190, 26, {align: 'right'});
+            doc.text(`Mitarbeiter: ${worker}`, 190, 34, {align: 'right'});
 
-            // Project Info Box (Right side)
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(10);
-            doc.text(`Datum/Zeit: ${new Date(date).toLocaleDateString('de-DE')} ${time}`, 190, 18, {align: 'right'});
-            doc.text(`Typ: ${type}`, 190, 24, {align: 'right'});
-            doc.text(`Etage: ${floor}`, 190, 30, {align: 'right'});
-            doc.setFont("helvetica", "bold");
-            doc.text(`Mitarbeiter: ${worker}`, 190, 38, {align: 'right'});
+            doc.setTextColor(0, 0, 0); doc.setFontSize(11);
+            doc.text(`Adresse: ${address}`, 20, 60);
 
-            // Body
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(14);
-            doc.setFont("helvetica", "bold");
-            doc.text("TÄGLICHER ARBEITSBERICHT", 105, 60, { align: "center" });
-            
-            doc.setFontSize(11);
-            doc.text("Standort / Objekt:", 20, 75);
-            doc.setFont("helvetica", "normal");
-            doc.text(address, 60, 75);
+            // Table Body
+            const body = data.map(item => [
+                item.puna, 
+                item.room, 
+                item.shenim, 
+                item.unit === 'X' ? item.amount : `${item.amount} ${item.unit}`
+            ]);
 
-            const tableRows = data.map(item => [item.puna, item.shenim || "-", `${item.m2.toFixed(2)} m²`]);
             doc.autoTable({
-                startY: 85,
-                head: [['Arbeitsart', 'Notiz / Details', 'Fläche']],
-                body: tableRows,
+                startY: 70,
+                head: [['Arbeitsart', 'Zimmer', 'Notiz', 'Menge']],
+                body: body,
                 theme: 'grid',
                 headStyles: { fillColor: [21, 128, 61], fontStyle: 'bold' },
-                bodyStyles: { fontStyle: 'bold', textColor: [0, 0, 0] },
-                columnStyles: { 2: { halign: 'right' } }
+                bodyStyles: { textColor: [0,0,0], fontStyle: 'bold' },
+                columnStyles: { 3: { halign: 'right' } },
+                didDrawCell: (data) => {
+                    // Logjika per bashkimin e qelizave vizualisht (hiq vijat horizontale nese puna eshte e njejte)
+                    if (data.column.index === 0 && data.cell.section === 'body') {
+                        const rowIndex = data.row.index;
+                        // Nese ka rresht me lart dhe emri i punes eshte i njejte
+                        if (rowIndex > 0 && body[rowIndex][0] === body[rowIndex - 1][0]) {
+                            // Fshijme tekstin e perseritur (opsionale, nese deshiron qe emri te duket vetem nje here)
+                            // data.cell.text = [""]; 
+                            
+                            // Heqim vijen e larte te qelizes per te dhene efektin e bashkimit
+                            const { x, y, width } = data.cell;
+                            doc.setDrawColor(255, 255, 255); // Ngjyre e bardhe
+                            doc.setLineWidth(0.4);
+                            doc.line(x + 0.5, y, x + width - 0.5, y); // Vizatojme vijen e bardhe mbi te zezen
+                            doc.setDrawColor(0, 0, 0); // Kthejme ngjyren
+                        }
+                    }
+                }
             });
 
-            // Total in Table
-            const finalY = doc.lastAutoTable.finalY || 100;
-            doc.setFont("helvetica", "bold");
-            doc.text(`GESAMTFLÄCHE: ${calculateTotal().toFixed(2)} m²`, 190, finalY + 10, {align: 'right'});
-
             if (returnBlob) return doc.output('blob');
-            doc.save(`Parkett_Haliti_${date}_${time.replace(':','-')}.pdf`);
+            doc.save(`Bericht_${date}.pdf`);
         }
 
         async function sharePDF() {
-            try {
-                const blob = await generatePDF(true);
-                const date = document.getElementById('work-date').value;
-                const file = new File([blob], `Bericht_Haliti_${date}.pdf`, { type: 'application/pdf' });
-                if (navigator.share) {
-                    await navigator.share({ title: 'Arbeitsbericht Parkett Haliti', files: [file] });
-                }
-            } catch (err) { console.error(err); }
+            const blob = await generatePDF(true);
+            if (!blob || !navigator.share) return;
+            const file = new File([blob], "Arbeitsbericht.pdf", { type: "application/pdf" });
+            navigator.share({ files: [file], title: "Arbeitsbericht" }).catch(console.error);
         }
     </script>
 </body>
