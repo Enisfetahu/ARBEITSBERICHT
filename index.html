@@ -54,7 +54,7 @@
             </div>
 
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-4">
-                <h3 class="text-sm font-bold text-gray-400 uppercase mb-3 tracking-wider text-center border-b pb-2">Standortdetails</h3>
+                <h3 class="text-sm font-bold text-gray-400 uppercase mb-3 tracking-wider text-center border-b pb-2">Standort</h3>
                 <div class="space-y-3">
                     <input type="text" id="project-address" placeholder="Strasse, Hausnummer, Ort" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-green-500 outline-none">
                     <div class="grid grid-cols-2 gap-3">
@@ -117,6 +117,7 @@
 
         function updateLiveTime() {
             const now = new Date();
+            // Ndryshuar ne de-DE per formatin DD.MM.YYYY
             document.getElementById('live-clock').innerText = now.toLocaleString('de-DE');
         }
 
@@ -220,10 +221,14 @@
         function loadHistory() {
             const container = document.getElementById('history-list');
             const history = JSON.parse(localStorage.getItem('haliti_reports') || '[]');
-            container.innerHTML = history.length ? history.map(entry => `
+            container.innerHTML = history.length ? history.map(entry => {
+                // Formatimi i dates ne histori
+                const d = entry.date.split('-');
+                const formattedDate = `${d[2]}.${d[1]}.${d[0]}`;
+                return `
                 <div class="p-3 bg-gray-50 border rounded-xl flex justify-between items-center text-xs">
                     <div class="flex-1 overflow-hidden">
-                        <div class="font-bold">${new Date(entry.date).toLocaleDateString()} | ${entry.time}</div>
+                        <div class="font-bold">${formattedDate} | ${entry.time}</div>
                         <div class="text-gray-500 truncate">${entry.address}</div>
                     </div>
                     <div class="flex gap-2 ml-2">
@@ -231,7 +236,7 @@
                         <button onclick="deleteEntry(${entry.id})" class="text-red-500 font-bold">X</button>
                     </div>
                 </div>
-            `).join('') : '<p class="text-center text-gray-400 py-4">Keine Daten</p>';
+            `}).join('') : '<p class="text-center text-gray-400 py-4">Keine Daten</p>';
         }
 
         function loadEntry(entry) {
@@ -283,14 +288,17 @@
             doc.text("PARKETT HALITI", 20, 25);
             
             doc.setFontSize(10);
-            const date = document.getElementById('work-date').value;
+            const rawDate = document.getElementById('work-date').value; // YYYY-MM-DD
+            const d = rawDate.split('-');
+            const formattedDate = `${d[2]}.${d[1]}.${d[0]}`; // Konvertuar ne DD.MM.YYYY
+            
             const time = document.getElementById('work-time').value;
             const address = document.getElementById('project-address').value;
             const worker = document.getElementById('worker-name').value;
             const floor = document.getElementById('project-floor').value;
             const type = document.getElementById('project-type').value;
 
-            doc.text(`Datum/Zeit: ${date} ${time}`, 190, 18, {align: 'right'});
+            doc.text(`Datum/Zeit: ${formattedDate} ${time}`, 190, 18, {align: 'right'});
             doc.text(`Etage/Typ: ${floor} (${type})`, 190, 26, {align: 'right'});
             doc.text(`Mitarbeiter: ${worker}`, 190, 34, {align: 'right'});
 
@@ -307,34 +315,28 @@
 
             doc.autoTable({
                 startY: 70,
-                head: [['Arbeitsart', 'Zimmer', 'Notiz', 'Menge']],
+                head: [['Arbeitsart', 'Zimmer', 'Notiz', 'Gesamt']],
                 body: body,
                 theme: 'grid',
                 headStyles: { fillColor: [21, 128, 61], fontStyle: 'bold' },
                 bodyStyles: { textColor: [0,0,0], fontStyle: 'bold' },
                 columnStyles: { 3: { halign: 'right' } },
                 didDrawCell: (data) => {
-                    // Logjika per bashkimin e qelizave vizualisht (hiq vijat horizontale nese puna eshte e njejte)
                     if (data.column.index === 0 && data.cell.section === 'body') {
                         const rowIndex = data.row.index;
-                        // Nese ka rresht me lart dhe emri i punes eshte i njejte
                         if (rowIndex > 0 && body[rowIndex][0] === body[rowIndex - 1][0]) {
-                            // Fshijme tekstin e perseritur (opsionale, nese deshiron qe emri te duket vetem nje here)
-                            // data.cell.text = [""]; 
-                            
-                            // Heqim vijen e larte te qelizes per te dhene efektin e bashkimit
                             const { x, y, width } = data.cell;
-                            doc.setDrawColor(255, 255, 255); // Ngjyre e bardhe
+                            doc.setDrawColor(255, 255, 255);
                             doc.setLineWidth(0.4);
-                            doc.line(x + 0.5, y, x + width - 0.5, y); // Vizatojme vijen e bardhe mbi te zezen
-                            doc.setDrawColor(0, 0, 0); // Kthejme ngjyren
+                            doc.line(x + 0.5, y, x + width - 0.5, y);
+                            doc.setDrawColor(0, 0, 0);
                         }
                     }
                 }
             });
 
             if (returnBlob) return doc.output('blob');
-            doc.save(`Bericht_${date}.pdf`);
+            doc.save(`Bericht_${formattedDate}.pdf`);
         }
 
         async function sharePDF() {
